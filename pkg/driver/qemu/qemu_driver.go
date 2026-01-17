@@ -419,6 +419,7 @@ func waitFileExists(path string, timeout time.Duration) error {
 // Ask the user to sign the qemu binary with the "com.apple.security.hypervisor" if needed.
 // Workaround for https://github.com/lima-vm/lima/issues/1742
 func checkBinarySignature(ctx context.Context, vmArch string) error {
+	//go:build darwin
 	macOSProductVersion, err := osutil.ProductVersion()
 	if err != nil {
 		return err

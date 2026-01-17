@@ -369,6 +369,8 @@ func adjustMemBytesDarwinARM64HVF(memBytes int64, accel string) int64 {
 	if accel != "hvf" {
 		return memBytes
 	}
+
+	//go:build darwin
 	macOSProductVersion, err := osutil.ProductVersion()
 	if err != nil {
 		logrus.Warn(err)
