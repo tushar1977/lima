@@ -105,10 +105,15 @@ GO_BUILD := $(strip $(GO) build $(GO_BUILD_GCFLAGS) $(GO_BUILD_LDFLAGS) $(GO_BUI
 ##@ Core
 # Show this help message
 .PHONY: help
-help: 
+help:
 	@echo 'Usage: make [target]'
 	@echo ''
-	@echo 'Targets:'
+	@echo 'Variables (can be overridden):'
+	@echo '  PREFIX        Installation prefix (default: /usr/local)'
+	@echo '  KEEP_DWARF    Keep DWARF information (1 or 0, default: 0)'
+	@echo '  KEEP_SYMBOLS  Keep symbols (1 or 0, default: 0)'
+	@echo '  DEBUG         Build with debug information (1 or 0, default: 0)'
+	@echo ''
 	@awk '\
 	BEGIN { desc="" } \
 	/^##@/ { \
@@ -132,77 +137,6 @@ help:
 		desc = ""; skip=0; \
 	} \
 	' $(MAKEFILE_LIST)
-################################################################################
-# Help
-#.PHONY: help2
-#help:
-#	@echo  '  binaries        - Build all binaries'
-#	@echo  '  manpages        - Build manual pages'
-#	@echo
-#	@echo  '  help-variables  - Show Makefile variables'
-#	@echo  '  help-targets    - Show additional Makefile targets'
-#
-#.PHONY: help-variables
-#help-variables:
-#	@echo  '# Variables that can be overridden.'
-#	@echo
-#	@echo  '- PREFIX       (directory)  : Installation prefix (default: /usr/local)'
-#	@echo  '- KEEP_DWARF   (1 or 0)     : Whether to keep DWARF information (default: 0)'
-#	@echo  '- KEEP_SYMBOLS (1 or 0)     : Whether to keep symbols (default: 0)'
-#	@echo  '- DEBUG        (1 or 0)     : Whether to build with debug information (default: 0)'
-#
-#.PHONY: help-targets
-#help-targets:
-#	@echo  '# Targets can be categorized by their location.'
-#	@echo
-#	@echo  'Targets for files in _output/bin/:'
-#	@echo  '- limactl                   : Build limactl, and lima'
-#	@echo  '- lima                      : Copy lima, and lima.bat'
-#	@echo  '- helpers                   : Copy nerdctl.lima, apptainer.lima, docker.lima, podman.lima, and kubectl.lima'
-#	@echo
-#	@echo  'Targets for files in _output/libexec/lima/:'
-#	@echo  '- limactl-plugins           : Build limactl-* CLI plugins'
-#	@echo
-#	@echo  'Targets for files in _output/share/lima/:'
-#	@echo  '- guestagents               : Build guestagents'
-#	@echo  '- native-guestagent         : Build guestagent for native arch'
-#	@echo  '- additional-guestagents    : Build guestagents for archs other than native arch'
-#	@echo  '- <arch>-guestagent         : Build guestagent for <arch>: $(sort $(LINUX_GUESTAGENT_ARCHS))'
-#	@echo
-#	@echo  'Targets for files in _output/share/lima/templates/:'
-#	@echo  '- templates                 : Copy templates'
-#	@echo  '- template_experimentals    : Copy experimental templates to experimental/'
-#	@echo  '- default_template          : Copy default.yaml template'
-#	@echo  '- update-templates          : Update templates'
-#	@echo
-#	@echo  'Targets for files in _output/share/doc/lima:'
-#	@echo  '- documentation             : Copy documentation to _output/share/doc/lima'
-#	@echo  '- create-links-in-doc-dir   : Create some symlinks pointing ../../lima/templates'
-#	@echo
-#	@echo  '# e.g. to install limactl, helpers, native guestagent, and templates:'
-#	@echo  '#   make native install'
-#
-#.PHONY: help-artifact
-#help-artifact:
-#	@echo  '# Targets for building artifacts to _artifacts/'
-#	@echo
-#	@echo  'Targets to building multiple archs artifacts for GOOS:'
-#	@echo  '- artifacts                 : Build artifacts for current OS and supported archs'
-#	@echo  '- artifacts-<GOOS>          : Build artifacts for supported archs and <GOOS>: darwin, linux, or windows'
-#	@echo
-#	@echo  'Targets to building GOOS and ARCH (GOARCH, or uname -m) specific artifacts:'
-#	@echo  '- artifact                  : Build artifacts for current GOOS and GOARCH'
-#	@echo  '- artifact-<GOOS>           : Build artifacts for current GOARCH and <GOOS>: darwin, linux, or windows'
-#	@echo  '- artifact-<ARCH>           : Build artifacts for current GOOS with <ARCH>: amd64, arm64, x86_64, or aarch64'
-#	@echo  '- artifact-<GOOS>-<ARCH>    : Build artifacts for <GOOS> and <ARCH>'
-#	@echo
-#	@echo  '# GOOS and GOARCH can be specified with make parameters or environment variables.'
-#	@echo  '# e.g. to build artifact for linux and arm64:'
-#	@echo  '#   make GOOS=linux GOARCH=arm64 artifact'
-#	@echo
-#	@echo  'Targets for miscellaneous artifacts:'
-#	@echo  '- artifacts-misc            : Build artifacts for go.mod, go.sum, and vendor'
-#
 ################################################################################
 # Build binaries and manpages
 .PHONY: all
