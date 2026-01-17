@@ -419,11 +419,6 @@ func TestFillDefault(t *testing.T) {
 			Shell:   ptr.Of("/bin/tcsh"),
 			UID:     ptr.Of(uint32(8080)),
 		},
-		VMOpts: limatype.VMOpts{
-			"qemu": map[string]any{
-				"minimumVersion": "9.1.0",
-			},
-		},
 	}
 
 	expect = d
@@ -474,11 +469,6 @@ func TestFillDefault(t *testing.T) {
 	y.DNS = []net.IP{net.ParseIP("8.8.8.8")}
 	y.AdditionalDisks = []limatype.Disk{{Name: "overridden"}}
 	y.User.Home = ptr.Of("/root")
-	y.VMOpts = limatype.VMOpts{
-		"vz": map[string]any{
-			"diskImageFormat": "raw",
-		},
-	}
 
 	expect = y
 
@@ -503,11 +493,6 @@ func TestFillDefault(t *testing.T) {
 	expect.Env["TWO"] = dExpected.Env["TWO"]
 
 	expect.Param["TWO"] = dExpected.Param["TWO"]
-
-	expect.VMOpts = limatype.VMOpts{
-		"qemu": dExpected.VMOpts["qemu"],
-		"vz":   y.VMOpts["vz"],
-	}
 
 	t.Logf("d.vmType=%v, y.vmType=%v, expect.vmType=%v", d.VMType, y.VMType, expect.VMType)
 
@@ -645,14 +630,6 @@ func TestFillDefault(t *testing.T) {
 			Shell:   ptr.Of("/bin/sh"),
 			UID:     ptr.Of(uint32(1122)),
 		},
-		VMOpts: limatype.VMOpts{
-			"vz": map[string]any{
-				"rosetta": map[string]any{
-					"enabled": true,
-					"binfmt":  true,
-				},
-			},
-		},
 	}
 
 	y = filledDefaults
@@ -706,16 +683,6 @@ func TestFillDefault(t *testing.T) {
 	expect.Plain = ptr.Of(false)
 
 	expect.NestedVirtualization = ptr.Of(false)
-
-	expect.VMOpts = limatype.VMOpts{
-		"qemu": dExpected.VMOpts["qemu"],
-		"vz": map[string]any{
-			"rosetta": map[string]any{
-				"enabled": true,
-				"binfmt":  true,
-			},
-		},
-	}
 
 	FillDefault(t.Context(), &y, &d, &o, filePath, false)
 	assert.DeepEqual(t, &y, &expect, opts...)
