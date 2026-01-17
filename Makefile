@@ -100,10 +100,6 @@ GO_BUILD := $(strip $(GO) build $(GO_BUILD_GCFLAGS) $(GO_BUILD_LDFLAGS) $(GO_BUI
 .NOTPARALLEL:
 .SECONDEXPANSION:
 
-################################################################################
-# Build binaries and manpages
-.PHONY: all
-all: binaries manpages
 
 ################################################################################
 ##@ Core
@@ -142,6 +138,9 @@ help:
 	} \
 	' $(MAKEFILE_LIST)
 ################################################################################
+# Build binaries and manpages
+.PHONY: all
+all: binaries manpages
 
 # convenience targets
 exe: _output/bin/limactl$(exe)
