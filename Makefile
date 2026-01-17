@@ -178,9 +178,6 @@ binaries: limactl helpers limactl-plugins guestagents \
 .PHONY: limactl lima helpers
 limactl: _output/bin/limactl$(exe) lima
 
-# Build limactl plugins
-.PHONY: limactl-plugins
-limactl-plugins: $(LIBEXEC_LIMA)/limactl-mcp$(exe)
 ### Listing Dependencies
 
 # returns a list of files expanded from $(1) excluding directories and files ending with '_test.go'.
@@ -282,6 +279,8 @@ endif
 
 LIBEXEC_LIMA := _output/libexec/lima
 
+# Build limactl plugins
+limactl-plugins: $(LIBEXEC_LIMA)/limactl-mcp$(exe)
 
 $(LIBEXEC_LIMA)/limactl-mcp$(exe): $(call dependencies_for_cmd,limactl-mcp) $$(call force_build,$$@)
 	@mkdir -p $(LIBEXEC_LIMA)
